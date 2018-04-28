@@ -76,9 +76,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || (!remoteMessage.getData().isEmpty())) {
-            if(FirebasePlugin.inBackground()){
-                 FirebasePlugin.execute("setBadgeNumber",[1],null);
+            try {
+                String badge = 1;
+                setBadgeCount(badge, this.getApplicationContext());
+            } 
+            catch (JSONException e) {
+                e.printStackTrace();
             }
+
             boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
             sendNotification(id, title, text, remoteMessage.getData(), showNotification, sound);
         }
@@ -145,6 +150,31 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bundle.putString("title", title);
             bundle.putString("body", messageBody);
             FirebasePlugin.sendNotification(bundle);
+        }
+    }
+
+    public static void setBadgeCount(String badge, Context ctx){
+        try {
+            //String badge = (String) remoteMessage.get("badge");
+            int badgeCount = 0;
+            if(badge!=null && !badge.isEmpty()){
+                badgeCount = tryParseInt(badge);
+            }
+            if(badgeCount>0)
+            {
+                ShortcutBadger. applyCountOrThrow(ctx, badgeCount);
+                Log.d(TAG, "showBadge worked!");
+            }
+
+        } catch (ShortcutBadgeException e) {
+            Log.e(TAG, "showBadge failed: " + e.getMessage());
+        }
+    }
+    static int tryParseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 }
