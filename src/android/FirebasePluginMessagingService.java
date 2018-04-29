@@ -77,7 +77,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || (!remoteMessage.getData().isEmpty())) {
             try {
-                String badge = 1;
+                String badge = "1";
                 setBadgeCount(badge, this.getApplicationContext());
             } 
             catch (JSONException e) {
