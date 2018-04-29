@@ -152,17 +152,19 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
     public static void setBadgeCount(String badge, Context ctx){
        
+        try {
             int badgeCount = 0;
             if(badge!=null && !badge.isEmpty()){
                 badgeCount = tryParseInt(badge);
             }
             if(badgeCount>0)
             {
-                ShortcutBadger. applyCountOrThrow(ctx, badgeCount);
+                ShortcutBadger.applyCountOrThrow(ctx, badgeCount);
                 Log.d(TAG, "showBadge worked!");
             }
-
-     
+        } catch (Exception e) {
+           
+        }
     }
     static int tryParseInt(String value) {
         try {
