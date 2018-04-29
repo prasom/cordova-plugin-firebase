@@ -76,13 +76,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || (!remoteMessage.getData().isEmpty())) {
-            try {
+            
                 String badge = "1";
                 setBadgeCount(badge, this.getApplicationContext());
-            } 
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
+          
 
             boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
             sendNotification(id, title, text, remoteMessage.getData(), showNotification, sound);
@@ -154,8 +151,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     }
 
     public static void setBadgeCount(String badge, Context ctx){
-        try {
-            //String badge = (String) remoteMessage.get("badge");
+       
             int badgeCount = 0;
             if(badge!=null && !badge.isEmpty()){
                 badgeCount = tryParseInt(badge);
@@ -166,9 +162,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "showBadge worked!");
             }
 
-        } catch (ShortcutBadgeException e) {
-            Log.e(TAG, "showBadge failed: " + e.getMessage());
-        }
+     
     }
     static int tryParseInt(String value) {
         try {
